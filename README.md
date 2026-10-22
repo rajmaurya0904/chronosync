@@ -24,7 +24,9 @@ pip install -e ".[dev]"
 
 ## Limitations
 
-<!-- Honest and short: what it does NOT do, known gaps. -->
+- Only supports SQLite databases; other database engines are not currently supported.
+- Does not handle automatic schema migrations; you must manage schema changes manually.
+
 
 ## Development
 
