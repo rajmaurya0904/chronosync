@@ -2,7 +2,7 @@
 
 **A lightweight CLI tool to bidirectionally synchronize local development database states and test fixtures across team members without dumping heavy files into git.**
 
-<!-- THE PROBLEM: 2-3 concrete lines on the annoying thing this removes. -->
+ChronoSync solves the pain of sharing database states and test fixtures among developers. Instead of committing bulky dumps to git, it lets you push and pull a lightweight snapshot of your local data, keeping the repository clean and ensuring every team member works with the same baseline.
 
 ## Example
 
