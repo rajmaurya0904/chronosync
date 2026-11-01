@@ -32,7 +32,7 @@ def row_json(row: Row) -> str:
 
 def content_key(row: Row) -> str:
     """Key for rows that have no primary key: a short hash of their content."""
-    return "h:" + hashlib.sha1(row_json(row).encode("utf-8")).hexdigest()[:16]  # noqa: S324
+    return "h:" + hashlib.sha1(row_json(row).encode("utf-8")).hexdigest()[:16]
 
 
 @dataclass
