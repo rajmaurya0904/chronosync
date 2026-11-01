@@ -50,13 +50,13 @@ def diff_states(left: DatabaseState, right: DatabaseState) -> dict[str, TableDif
     return result
 
 
-def summarize(diff: dict[str, TableDiff]) -> list[str]:
-    """Human-readable one-line-per-table summary."""
+def summarize(diff: dict[str, TableDiff], left: str = "left", right: str = "right") -> list[str]:
+    """Human-readable one-line-per-table summary; ``left``/``right`` name the two sides."""
     lines = []
     for name, d in diff.items():
         parts = []
         if d.only_in:
-            parts.append(f"table only in {d.only_in}")
+            parts.append(f"table only in {left if d.only_in == 'left' else right}")
         if d.added:
             parts.append(f"+{len(d.added)}")
         if d.removed:

@@ -65,9 +65,7 @@ def write_database(conn: sqlite3.Connection, state: DatabaseState) -> None:
 
     Tables that exist in the database but not in ``state`` are left untouched.
     """
-    existing = {
-        r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
-    }
+    existing = {r[0] for r in conn.execute("SELECT name FROM sqlite_master WHERE type = 'table'")}
     with conn:
         for name, table in state.tables.items():
             if name not in existing:
@@ -78,8 +76,5 @@ def write_database(conn: sqlite3.Connection, state: DatabaseState) -> None:
             sql = f"INSERT INTO {quote(name)} ({cols}) VALUES ({marks})"
             conn.executemany(
                 sql,
-                [
-                    [decode_value(row.get(c)) for c in table.columns]
-                    for row in table.rows.values()
-                ],
+                [[decode_value(row.get(c)) for c in table.columns] for row in table.rows.values()],
             )

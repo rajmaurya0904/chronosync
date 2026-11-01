@@ -9,3 +9,6 @@ dist/
 .pytest_cache/
 
 TASKS.md
+
+.chronosync-state.json
+*.db

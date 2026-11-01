@@ -19,6 +19,8 @@ class OpResult:
     """Outcome of an operation, for the CLI to print."""
 
     action: str
+    left: str = "snapshot"
+    right: str = "database"
     diff: dict[str, TableDiff] = field(default_factory=dict)
     conflicts: list[Conflict] = field(default_factory=list)
     applied: bool = False
@@ -85,7 +87,13 @@ def pull(cfg: Config, *, dry_run: bool = False) -> OpResult:
     """Overwrite the local database's rows with the snapshot."""
     remote = _filter(read_snapshot(cfg.snapshot_dir), cfg.exclude_tables)
     local = _local(cfg) if Path(cfg.database).exists() else DatabaseState()
-    result = OpResult("pull", diff=diff_states(local, remote), rows=remote.row_count())
+    result = OpResult(
+        "pull",
+        left="database",
+        right="snapshot",
+        diff=diff_states(local, remote),
+        rows=remote.row_count(),
+    )
     if not dry_run:
         conn = connect(cfg.database, create=True)
         try:
