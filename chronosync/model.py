@@ -53,3 +53,21 @@ class DatabaseState:
 
     def row_count(self) -> int:
         return sum(len(t.rows) for t in self.tables.values())
+
+
+def state_to_dict(state: DatabaseState) -> dict[str, Any]:
+    """Plain-JSON form of a state (used for the local last-sync record)."""
+    return {
+        name: {"create_sql": t.create_sql, "columns": t.columns, "pk": t.pk, "rows": t.rows}
+        for name, t in state.tables.items()
+    }
+
+
+def state_from_dict(data: dict[str, Any]) -> DatabaseState:
+    """Inverse of :func:`state_to_dict`."""
+    return DatabaseState(
+        {
+            name: TableState(t["create_sql"], t["columns"], t["pk"], t["rows"])
+            for name, t in data.items()
+        }
+    )
