@@ -23,8 +23,8 @@ if ! [[ "$NEW_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
 fi
 
 # Update __version__ in __init__.py
-if grep -q "__version__ = \"[^"]*\"" "$INIT_FILE"; then
-  sed -i.bak "s/__version__ = \"[^"]*\"/__version__ = \"$NEW_VERSION\"/" "$INIT_FILE"
+if grep -q '__version__ = "[^"]*"' "$INIT_FILE"; then
+  sed -i.bak "s/__version__ = \"[^\"]*\"/__version__ = \"$NEW_VERSION\"/" "$INIT_FILE"
   rm "$INIT_FILE.bak"
 else
   echo "__version__ = \"$NEW_VERSION\"" >> "$INIT_FILE"
@@ -32,7 +32,7 @@ fi
 
 # Add entry to CHANGELOG.md
 TODAY=$(date +%Y-%m-%d)
-printf "\n## [%s] - %s\n\n- TODO: describe changes\n" "$NEW_VERSION" "$TODAY" >> "$CHANGELOG"
+printf "\n## [%s] - %s\n\n- See the git log for details\n" "$NEW_VERSION" "$TODAY" >> "$CHANGELOG"
 
 # Commit changes
 git add "$INIT_FILE" "$CHANGELOG"
