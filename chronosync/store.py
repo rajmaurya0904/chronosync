@@ -16,6 +16,7 @@ import json
 import re
 from pathlib import Path
 
+from .db import row_key
 from .model import DatabaseState, TableState, row_json
 
 FORMAT_VERSION = 1
@@ -64,8 +65,6 @@ def write_snapshot(directory: str | Path, state: DatabaseState) -> None:
 
 def read_snapshot(directory: str | Path) -> DatabaseState:
     """Load a snapshot directory back into a :class:`DatabaseState`."""
-    from .db import row_key
-
     root = Path(directory)
     manifest_path = root / "manifest.json"
     if not manifest_path.is_file():
