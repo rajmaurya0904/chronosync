@@ -13,6 +13,7 @@ from .config import DEFAULT_CONFIG_NAME, PREFER_CHOICES, Config, ConfigError, re
 from .db import DatabaseError
 from .diff import summarize
 from .merge import SchemaMismatch
+from .model import row_json
 from .store import SnapshotError
 
 EXIT_OK = 0
@@ -70,6 +71,10 @@ def _config_from_args(args: argparse.Namespace) -> Config:
     return dataclasses.replace(cfg, **overrides)
 
 
+def _show(row: dict | None) -> str:
+    return "(deleted)" if row is None else row_json(row)
+
+
 def _print_diff(result: ops.OpResult, out) -> None:
     lines = summarize(result.diff, result.left, result.right)
     if lines:
@@ -124,10 +129,9 @@ def _cmd_sync(cfg: Config, args: argparse.Namespace) -> int:
     if result.conflicts:
         print(f"{len(result.conflicts)} conflict(s); nothing was changed:", file=sys.stderr)
         for c in result.conflicts:
-            print(
-                f"  {c.table} [{c.key}]\n    local:  {c.local}\n    remote: {c.remote}",
-                file=sys.stderr,
-            )
+            print(f"  {c.table} [{c.key}]", file=sys.stderr)
+            print(f"    local:  {_show(c.local)}", file=sys.stderr)
+            print(f"    remote: {_show(c.remote)}", file=sys.stderr)
         print("Re-run with --prefer local or --prefer remote to settle them.", file=sys.stderr)
         return EXIT_CONFLICT
     prefix = "Dry run: would apply" if args.dry_run else "Synced;"
